@@ -273,8 +273,7 @@ def addBookTitle(catalog, title):
     # TODO lab 6, agregar el libro al map de titulos
     """Agrega el lirbo al map de"""
 
-    titulo = catalog['titles']
-    mp.put(titulo, title['original_title'], catalog['books'])
+    mp.put(catalog['titles'], title['original_title'], title)
 
 
 
@@ -320,9 +319,9 @@ def getBookByTitle(catalog, title):
     """
     Retorna el libro con el titulo dado
     """
-    titulo = mp.get(catalog['titles'], title)
-    if titulo:
-        return me.getValue(titulo)
+    book = mp.get(catalog['titles'], title)
+    if book:
+        return me.getValue(book)
     return None
 
 
