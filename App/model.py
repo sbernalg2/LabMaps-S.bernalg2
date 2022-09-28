@@ -59,7 +59,8 @@ def newCatalog():
                'authors': None,
                'tags': None,
                'tagIds': None,
-               'years': None}
+               'years': None,
+               'titles': None}
 
     """
     Esta lista contiene todo los libros encontrados
@@ -120,7 +121,10 @@ def newCatalog():
     La columna 'titles' del archivo books.csv
     """
     # TODO lab 6, agregar el ADT map con newMap()
-    catalog['titles'] = None
+    catalog['titles'] = mp.newMap(10000,
+                                  maptype='CHAINING',
+                                  loadfactor=4,
+                                  comparefunction=compareTitles)
 
     return catalog
 
@@ -267,10 +271,12 @@ def addBookTag(catalog, tag):
 
 def addBookTitle(catalog, title):
     # TODO lab 6, agregar el libro al map de titulos
-    """
-    Completar la descripcion de addBookTitle
-    """
-    pass
+    """Agrega el lirbo al map de"""
+
+    titulo = catalog['titles']
+    mp.put(titulo, title['original_title'], catalog['books'])
+
+
 
 
 # ==============================
@@ -312,9 +318,12 @@ def getBooksByYear(catalog, year):
 def getBookByTitle(catalog, title):
     # TODO lab 6, retornar el libro con el titulo dado
     """
-    Completar la descripcion de getBookByTitle
+    Retorna el libro con el titulo dado
     """
-    pass
+    titulo = mp.get(catalog['titles'], title)
+    if titulo:
+        return me.getValue(titulo)
+    return None
 
 
 def booksSize(catalog):
@@ -341,9 +350,9 @@ def tagsSize(catalog):
 def titlesSize(catalog):
     # TODO lab 6, retornar el numero de libros en el catalogo
     """
-    Completar la descripcion de titlesSize
+    Retorna el numero de libros en el catalogo
     """
-    pass
+    return mp.size(catalog['titles'])
 
 
 # ==============================
@@ -442,4 +451,10 @@ def compareTitles(title, book):
         int: retrona 0 si son iguales, 1 si el primero es mayor
         y -1 si el primero es menor
     """
-    pass
+    bookentry = me.getKey(book)
+    if (title == bookentry):
+        return 0
+    elif (title > bookentry):
+        return 1
+    else:
+        return -1
